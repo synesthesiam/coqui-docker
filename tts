@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+args=()
+
+while [[ -n "$1" ]]; do
+    if [[ "$1" == '--update' ]]; then
+        # Update Docker image
+        docker pull coqui-tts
+    else
+        args+=("$1")
+    fi
+
+    shift 1
+done
+
+docker run \
+       -it \
+       -e "HOME=${HOME}" \
+       -v "$HOME:${HOME}" \
+       -w "${PWD}" \
+       --user "$(id -u):$(id -g)" \
+       coqui-tts \
+       "${args[@]}"
