@@ -4,7 +4,7 @@ args=()
 while [[ -n "$1" ]]; do
     if [[ "$1" == '--update' ]]; then
         # Update Docker image
-        docker pull coqui-tts
+        docker pull synesthesiam/coqui-tts
     else
         args+=("$1")
     fi
@@ -19,6 +19,6 @@ docker run \
        -w "${PWD}" \
        -p 5002:5002 \
        --user "$(id -u):$(id -g)" \
-       --entrypoint 'tts-server' \
-       coqui-tts \
+       --entrypoint '/app/bin/tts-server' \
+       synesthesiam/coqui-tts \
        "${args[@]}"
