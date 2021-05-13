@@ -12,15 +12,20 @@ Access TTS server at http://localhost:5002
 
 ## Scripts Available
 
-* `tts-server`
+* [`tts-server`](https://raw.githubusercontent.com/synesthesiam/coqui-docker/master/coqui-tts/tts-server)
     * Similar to Coqui TTS `tts-server` command
-    * Server at https://localhost:5002, Runs as current user, has access to `$HOME` directory
+    * Server at https://localhost:5002, runs as current user, has access to `$HOME` directory
     * Use `--use_cuda true` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
     * Use `--update` to update Docker image
-* `tts`
+* [`tts`](https://raw.githubusercontent.com/synesthesiam/coqui-docker/master/coqui-tts/tts)
     * Similar to Coqui TTS `tts` command
     * Runs as current user, has access to `$HOME` directory
     * Use `--use_cuda true` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
+    * Use `--update` to update Docker image
+* [`tts-train`](https://raw.githubusercontent.com/synesthesiam/coqui-docker/master/coqui-tts/tts-train)
+    * Runs script from `TTS/bin` (e.g., `tts-train train_tacotron.py ...`)
+    * Runs as root, has access to `$HOME` directory
+    * Requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) (`amd64` only)
     * Use `--update` to update Docker image
 
 ## Images Available
