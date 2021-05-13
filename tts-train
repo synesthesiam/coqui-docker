@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Run tts-train --update to update Docker image
+
+args=()
+tag='gpu'
+
+while [[ -n "$1" ]]; do
+    if [[ "$1" == '--update' ]]; then
+        # Update Docker image
+        update='1'
+    else
+        args+=("$1")
+    fi
+
+    shift 1
+done
+
+if [[ -n "${update}" ]]; then
+    docker pull "synesthesiam/coqui-tts:${tag}"
+fi
+
+if [[ -z "${args[*]}" ]]; then
+    echo "Script name is required (from TTS/bin)"
+    exit 1
+fi
+
+# Fix path
+args[0]="/opt/conda/lib/python3.8/site-packages/TTS/bin/${args[0]}"
+
+nvidia-docker run \
+              -it \
+              -v "$HOME:${HOME}" \
+              -w "${PWD}" \
+              --entrypoint 'python3' \
+              "synesthesiam/coqui-tts:${tag}" \
+              "${args[@]}"
