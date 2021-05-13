@@ -3,7 +3,7 @@
 Docker images and scripts for [Coqui TTS](https://github.com/coqui-ai/TTS)
 
 ```sh
-$ curl https://raw.githubusercontent.com/synesthesiam/coqui-docker/master/coqui-docker/coqui-tts/tts-server \
+$ curl https://raw.githubusercontent.com/synesthesiam/coqui-docker/master/coqui-tts/tts-server \
     > ~/bin/tts-server && chmod +755 ~/bin/tts-server
 $ tts-server
 ```
