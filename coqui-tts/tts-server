@@ -22,7 +22,7 @@ while [[ -n "$1" ]]; do
 
     if [[ "$1" == '--update' ]]; then
         # Update Docker image
-        docker pull synesthesiam/coqui-tts
+        update='1'
     elif [[ "$1" == '--use_cuda' ]]; then
         # Check next argument
         check_cuda_arg='1'
@@ -33,6 +33,10 @@ while [[ -n "$1" ]]; do
 
     shift 1
 done
+
+if [[ -n "${update}" ]]; then
+    docker pull "synesthesiam/coqui-tts:${tag}"
+fi
 
 "${docker}" run \
             -it \
