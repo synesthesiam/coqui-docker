@@ -1,5 +1,9 @@
 FROM nvcr.io/nvidia/pytorch:21.02-py3
 
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+      espeak-ng
+
 COPY download/amd64/ /download/
 
 ARG TTS_VERSION=0.0.13.2

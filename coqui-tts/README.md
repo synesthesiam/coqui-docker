@@ -15,12 +15,12 @@ Access TTS server at http://localhost:5002
 * `tts-server`
     * Similar to Coqui TTS `tts-server` command
     * Server at https://localhost:5002, Runs as current user, has access to `$HOME` directory
-    * Use `--gpu` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
+    * Use `--use_cuda true` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
     * Use `--update` to update Docker image
 * `tts`
     * Similar to Coqui TTS `tts` command
     * Runs as current user, has access to `$HOME` directory
-    * Use `--gpu` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
+    * Use `--use_cuda true` to use GPU image (requires [nvidia-docker](https://github.com/NVIDIA/nvidia-docker), `amd64` only)
     * Use `--update` to update Docker image
 
 ## Images Available
@@ -43,6 +43,6 @@ Docker images also tagged with `<VERSION>` or `gpu-<VERSION>` for the version of
 
 * `amd64` - laptops/desktops/servers
     * GPU-ready images have `gpu` tag instead of `latest`
-    * Run `tts-server --gpu`
+    * Run `tts-server --use_cuda true`
 * `armv7l` - Raspberry Pi 3/4 32-bit
 * `arm64` - Raspberry Pi 3/4 64-bit
