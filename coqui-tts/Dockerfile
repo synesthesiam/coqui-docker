@@ -60,4 +60,6 @@ RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
 # Stop eSpeak from reaching out to pulseaudio, even if told to be silent
 ENV PULSE_SERVER=''
 
-ENTRYPOINT ["/app/bin/tts"]
+ENV PATH=/app/bin:${PATH}
+
+ENTRYPOINT ["tts"]

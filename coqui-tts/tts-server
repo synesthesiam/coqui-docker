@@ -29,6 +29,6 @@ done
             -w "${PWD}" \
             -p 5002:5002 \
             --user "$(id -u):$(id -g)" \
-            --entrypoint '/app/bin/tts-server' \
+            --entrypoint 'tts-server' \
             "synesthesiam/coqui-tts:${tag}" \
             "${args[@]}"
