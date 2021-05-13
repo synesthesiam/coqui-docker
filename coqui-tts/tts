@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
+
+# Run tts --update to update Docker image
+# Run tts --gpu to use GPU image
+
 args=()
+tag='latest'
+docker='docker'
 
 while [[ -n "$1" ]]; do
     if [[ "$1" == '--update' ]]; then
         # Update Docker image
         docker pull synesthesiam/coqui-tts
+    elif [[ "$1" == '--gpu' ]]; then
+        # Use GPU version
+        docker='nvidia-docker'
+        tag='gpu'
     else
         args+=("$1")
     fi
@@ -12,11 +22,11 @@ while [[ -n "$1" ]]; do
     shift 1
 done
 
-docker run \
-       -it \
-       -e "HOME=${HOME}" \
-       -v "$HOME:${HOME}" \
-       -w "${PWD}" \
-       --user "$(id -u):$(id -g)" \
-       synesthesiam/coqui-tts \
-       "${args[@]}"
+"${docker}" run \
+            -it \
+            -e "HOME=${HOME}" \
+            -v "$HOME:${HOME}" \
+            -w "${PWD}" \
+            --user "$(id -u):$(id -g)" \
+            "synesthesiam/coqui-tts:${tag}" \
+            "${args[@]}"

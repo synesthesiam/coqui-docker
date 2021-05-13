@@ -1,0 +1,12 @@
+FROM nvcr.io/nvidia/pytorch:21.02-py3
+
+COPY download/amd64/ /download/
+
+ARG TTS_VERSION=0.0.13.2
+
+RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
+    pip install -f /download "TTS==${TTS_VERSION}"
+
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4
+
+ENTRYPOINT ["tts"]
