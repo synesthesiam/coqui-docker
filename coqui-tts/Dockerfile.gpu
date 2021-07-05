@@ -2,14 +2,25 @@ FROM nvcr.io/nvidia/pytorch:21.02-py3
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-      espeak-ng
+      espeak-ng wget
 
 COPY download/amd64/ /download/
 
-ARG TTS_VERSION=0.0.13.2
+ARG TTS_VERSION
+
+# Remove torch, numpy, and scipy from requirements.txt since they already exist in the continer
+RUN wget -O "TTS-${TTS_VERSION}.tar.gz" "https://github.com/coqui-ai/TTS/archive/refs/tags/v${TTS_VERSION}.tar.gz" && \
+    tar -xf "TTS-${TTS_VERSION}.tar.gz" && \
+    cd "TTS-${TTS_VERSION}/" && \
+    sed -i '/^\(torch\|numpy\|scipy\)[>=~]/d' requirements.txt
 
 RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
-    pip install -f /download "TTS==${TTS_VERSION}"
+    cd "TTS-${TTS_VERSION}/" && \
+    pip install -f /download -r requirements.txt
+
+RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
+    cd "TTS-${TTS_VERSION}/" && \
+    pip install -f /download .
 
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4
 

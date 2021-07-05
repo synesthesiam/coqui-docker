@@ -3,7 +3,7 @@
 SHELL := bash
 DOCKER_REGISTRY ?= docker.io
 PLATFORMS ?= linux/amd64,linux/arm64,linux/arm/v7
-TTS_VERSION ?= 0.0.13.2
+TTS_VERSION ?= 0.1.0
 
 cpu:
 	mkdir -p download/amd64 download/arm64 download/armv7

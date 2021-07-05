@@ -4,11 +4,16 @@ ARG TARGETVARIANT
 
 ENV LLVM_VERSION=9
 
+# Deconflict apt locks by platform in cache
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
+
 RUN --mount=type=cache,id=apt-run,target=/var/apt/cache \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get update && \
     apt-get install --yes --no-install-recommends \
         espeak-ng wget \
-        libatlas3-base libgfortran5 libopenblas-base
+        libatlas3-base libgfortran5 libopenblas-base \
+        libmecab-dev
 
 # Need llvm dev package for arm64 and armv7l
 RUN --mount=type=cache,id=apt-run,target=/var/apt/cache \
@@ -23,7 +28,7 @@ RUN --mount=type=cache,id=apt-run,target=/var/apt/cache \
 # Create virtual environment so we can use a working pip
 RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
     python3 -m venv /app && \
-    /app/bin/pip3 install --upgrade 'pip<=20.2.4' && \
+    /app/bin/pip3 install --upgrade pip && \
     /app/bin/pip3 install --upgrade wheel setuptools
 
 COPY download/${TARGETARCH}${TARGETVARIANT}/ /download/
@@ -43,10 +48,10 @@ RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
       -f https://synesthesiam.github.io/prebuilt-apps/index.html \
       -f /download
 
-ARG TTS_VERSION=0.0.13.2
+ARG TTS_VERSION
 
 # Remove torch, numpy, and scipy from requirements.txt since we already installed them above.
-RUN wget -O "TTS-${TTS_VERSION}.tar.gz" 'https://files.pythonhosted.org/packages/0a/5b/2acffd3483126a942e781c79993b2f812de73973b79d52d7b56402e14b89/TTS-0.0.13.2.tar.gz' && \
+RUN wget -O "TTS-${TTS_VERSION}.tar.gz" "https://github.com/coqui-ai/TTS/archive/refs/tags/v${TTS_VERSION}.tar.gz" && \
     tar -xf "TTS-${TTS_VERSION}.tar.gz" && \
     cd "TTS-${TTS_VERSION}/" && \
     sed -i '/^\(torch\|numpy\|scipy\)[>=~]/d' requirements.txt
@@ -56,6 +61,9 @@ RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
 
 RUN --mount=type=cache,id=python-run,target=/var/apt/cache \
     /app/bin/pip3 install "/TTS-${TTS_VERSION}" -f /download
+
+# Clean up
+RUN rm -f /etc/apt/apt.conf.d/01cache
 
 # Stop eSpeak from reaching out to pulseaudio, even if told to be silent
 ENV PULSE_SERVER=''
